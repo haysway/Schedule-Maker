@@ -248,7 +248,7 @@ void Schedule::printScheduleToCVS(const string& scheduleFile) const
 
     vector<string> daysOfWeek = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
 
-    // Open a file in write mode
+    // // Open a file in write mode
     ofstream outfile(scheduleFile);
 
     if (!outfile.is_open()) {
@@ -262,6 +262,7 @@ void Schedule::printScheduleToCVS(const string& scheduleFile) const
     }
     outfile << endl;
 
+    // organize shifts into a map by day and shift type
     unordered_map<int, vector<Shift>> shiftsByDay;
     for (const auto& shift : shifts) {
         shiftsByDay[shift.getDay()].emplace_back(shift);
@@ -269,48 +270,79 @@ void Schedule::printScheduleToCVS(const string& scheduleFile) const
 
     int currentDay = 1;
     int weekDay = startDay;
+    for(int i = 0; i < startDay; i++) {
+        outfile << "No shifts,";
+    }
 
-    // Iterate over all days in the month
     while (currentDay <= daysInMonth) {
-        if (weekDay == 6) {
-            outfile << "No shifts,";
+
+        if (weekDay == 6) {                                                                         // Check if it's a Sunday (no shifts)
+            outfile << "No shifts," << endl;
         } else {
             auto dayShiftsIt = shiftsByDay.find(currentDay);
 
             if (dayShiftsIt != shiftsByDay.end()) {
+                bool hasShifts = false;                                                             // Flag to check if any shifts are present
+
                 const auto& dayShifts = dayShiftsIt->second;
-                for (int shiftType = 0; shiftType <= 2; ++shiftType) {
+
+                for (int shiftType = 0; shiftType <= 2; ++shiftType) {                              // Print shifts for the current day
                     bool shiftPrinted = false;
+
                     for (const auto& shift : dayShifts) {
-                        if (shift.getShiftType() == shiftType) {
+
+                        if (shift.getShiftType() == shiftType) {                                    // check to make sure we're in the right spot
+
                             if (!shiftPrinted) {
-                                outfile << "Shift " << shiftType << " [";
-                                shiftPrinted = true;
+                                outfile << "Shift " << shiftType << " ";
+                                shiftPrinted = true;                                 
                             }
-                            const auto& workersList = shift.getWorkers();
-                            for (size_t i = 0; i < workersList.size(); ++i) {
-                                if (i > 0) outfile << ", ";
+
+                            const auto& workersList = shift.getWorkers();                           // store the assigned workers to workersList (carefully)
+                            outfile << "[";
+                            for (size_t i = 0; i < workersList.size(); ++i) {                       // for each name in the list print it
+                                if (i > 0) outfile << " ";
                                 outfile << workersList[i];
                             }
-                            outfile << "],";
-                        }
-                    }
-                    if (!shiftPrinted) {
-                        outfile << ",";
-                    }
-                }
-            } else {
-                outfile << "No shifts,";
-            }
-        }
+                            outfile << "]";
 
+                            hasShifts = true;                                                       // that day has shifts
+
+                        }
+
+                    }
+
+                }
+
+                if (!hasShifts) {
+                    outfile << "No shifts" << endl;
+                }
+
+                outfile << ",";
+
+            } else {
+                outfile << "No shifts," << endl;
+            }
+        }                                                 
+
+        // Move to the next day and weekday
         ++currentDay;
         weekDay = (weekDay + 1) % 7;
+
     }
+    
+    for(int i = weekDay; i < 7; i++) {
+        outfile << "No shifts,";
+    }
+
 
     outfile << endl;
     outfile.close();
 
     cout << "Schedule written to " << scheduleFile << endl;
+
+
+
+
 
 }
