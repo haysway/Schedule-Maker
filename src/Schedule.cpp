@@ -252,7 +252,7 @@ void Schedule::printScheduleToCVS(const string& scheduleFile) const
     ofstream outfile(scheduleFile);
 
     if (!outfile.is_open()) {
-        cerr << "Error opening file!" << std::endl;
+        cerr << "Error opening file!" << endl;
         return;
     }
 
@@ -308,9 +308,9 @@ void Schedule::printScheduleToCVS(const string& scheduleFile) const
         weekDay = (weekDay + 1) % 7;
     }
 
-    outfile << std::endl;
+    outfile << endl;
     outfile.close();
 
-    cout << "Schedule written to " << scheduleFile << std::endl;
+    cout << "Schedule written to " << scheduleFile << endl;
 
 }

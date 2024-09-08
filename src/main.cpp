@@ -70,8 +70,7 @@ int main()
     }
     cout << "Total shifts this month: " << totalShifts << endl;
 
-    schedule.printScheduleToCVS("C:/Users/swain/Schedule Maker/src/scheduleFile.csv");
-
+    schedule.printScheduleToCVS("C:/Users/swain/ScheduleMakerGit/Schedule-Maker/src/scheduleFile.csv");
     for (Worker* worker : workers) {
         delete worker;
     }
