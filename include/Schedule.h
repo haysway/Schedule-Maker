@@ -35,14 +35,6 @@ public:
 protected:
     void addWorkers(Shift&, vector<Worker*>, int);
 
-    void addTwoBoys(Shift&, vector<Worker*>, vector<Worker*>);
-
-    void addTwoGirls(Shift&, vector<Worker*>, vector<Worker*>);
-
-    void addOneBoy(Shift&, vector<Worker*>, vector<Worker*>);
-
-    void addOneGirl(Shift&, vector<Worker*>, vector<Worker*>);
-
 };
 
 #endif
