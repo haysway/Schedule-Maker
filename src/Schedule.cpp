@@ -245,6 +245,7 @@ void Schedule::printSchedule() const
 
 void Schedule::printScheduleToCVS(const string& scheduleFile) const
 {
+    // very similar to print schedule, just printing to a csv file, so some delimiters are added/removed
 
     vector<string> daysOfWeek = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
 
@@ -270,14 +271,16 @@ void Schedule::printScheduleToCVS(const string& scheduleFile) const
 
     int currentDay = 1;
     int weekDay = startDay;
+
     for(int i = 0; i < startDay; i++) {
-        outfile << "No shifts,";
+        outfile << "NULL,";
     }
+
 
     while (currentDay <= daysInMonth) {
 
         if (weekDay == 6) {                                                                         // Check if it's a Sunday (no shifts)
-            outfile << "No shifts," << endl;
+            outfile << "No shifts Sunday," << endl;
         } else {
             auto dayShiftsIt = shiftsByDay.find(currentDay);
 
@@ -307,21 +310,18 @@ void Schedule::printScheduleToCVS(const string& scheduleFile) const
                             outfile << "]";
 
                             hasShifts = true;                                                       // that day has shifts
-
                         }
-
                     }
-
                 }
 
                 if (!hasShifts) {
-                    outfile << "No shifts" << endl;
+                    outfile << "No shifts a";
                 }
 
                 outfile << ",";
 
             } else {
-                outfile << "No shifts," << endl;
+                outfile << "No shifts b,";
             }
         }                                                 
 
@@ -332,17 +332,12 @@ void Schedule::printScheduleToCVS(const string& scheduleFile) const
     }
     
     for(int i = weekDay; i < 7; i++) {
-        outfile << "No shifts,";
+        outfile << "NULL,";
     }
-
 
     outfile << endl;
     outfile.close();
 
     cout << "Schedule written to " << scheduleFile << endl;
-
-
-
-
 
 }
