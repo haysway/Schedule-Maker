@@ -21,7 +21,6 @@ int main()
     Worker::loadWorkers("C:/Users/swain/Schedule Maker/src/worker.txt", workers);
 
     default_random_engine rng(static_cast<unsigned>(time(nullptr)));
-
     shuffle(workers.begin(), workers.end(), rng);  
 
     int startDay, daysInMonth, summerinput, holiday;

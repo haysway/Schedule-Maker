@@ -33,6 +33,8 @@ public:
     void printSchedule() const;
 
 protected:
+    void addWorkers(Shift&, vector<Worker*>, int);
+
     void addTwoBoys(Shift&, vector<Worker*>, vector<Worker*>);
 
     void addTwoGirls(Shift&, vector<Worker*>, vector<Worker*>);

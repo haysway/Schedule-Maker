@@ -5,10 +5,7 @@
 #include "../include/Worker.h"
 
 Worker::Worker(string name, int gender, vector<int> daysOff) : name(name), gender(gender), requestedDaysOff(daysOff), totalHoursWorked(0), shiftsWorked(0)
-{
-    cout << "Creating worker " << name << endl;
-
-}
+{}
 
 string Worker::getName()
 {

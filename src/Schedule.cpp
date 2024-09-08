@@ -130,27 +130,27 @@ void Schedule::assignWorkersToShifts()
 
             // Assign one girl and two boys, or two girls and one boy
             if (shiftType == 0) {                                                   // Shift 0 has 2 workers, so assign one of each
-                addOneBoy(shift, boys, girls);
-                addOneGirl(shift, boys, girls);
+                addWorkers(shift, boys, 1);
+                addWorkers(shift, girls, 1);
             } else {                                                                // Shifts 1 and 2 have 3 workers, so assign one girl and two boys (or vice versa)
                 if ((boys.size() >= 2) && (girls.size() >= 2)) {                    // if enough of each gender
 
                     if (prioritizeBoys) {                                           // add two boys
-                        addTwoBoys(shift, boys, girls);
-                        addOneGirl(shift, boys, girls);
+                        addWorkers(shift, boys, 2);
+                        addWorkers(shift, girls, 1);
                         prioritizeBoys = false;
                     } else {                                                        // or add two girls
-                        addTwoGirls(shift, boys, girls);
-                        addOneBoy(shift, boys, girls);
+                        addWorkers(shift, girls, 2);
+                        addWorkers(shift, boys, 1);
                         prioritizeBoys = true;
                     }
 
                 } else if (boys.size() >= 2) {                                      // else if enough boys but not enough girls
-                    addTwoBoys(shift, boys, girls);
-                    addOneGirl(shift, boys, girls);
+                    addWorkers(shift, boys, 2);
+                    addWorkers(shift, girls, 1);
                 } else {                                                            // else there are enough girls but not enough boys
-                    addOneBoy(shift, boys, girls);
-                    addTwoGirls(shift, boys, girls);
+                    addWorkers(shift, girls, 2);
+                    addWorkers(shift, boys, 1);
                 }
             }
         }
@@ -158,40 +158,12 @@ void Schedule::assignWorkersToShifts()
 
 }
 
-void Schedule::addTwoBoys(Shift& shift, vector<Worker*> boys, vector<Worker*> girls)
-{
-    shift.addWorker(boys[0]->getName());
-    boys[0]->updateHours(shift.getAmountHours());
-    boys[0]->updateShiftsWorked();
-
-    shift.addWorker(boys[1]->getName());
-    boys[1]->updateHours(shift.getAmountHours());
-    boys[1]->updateShiftsWorked();
-}
-
-void Schedule::addTwoGirls(Shift& shift, vector<Worker*> boys, vector<Worker*> girls)
-{
-    shift.addWorker(girls[1]->getName());
-    girls[1]->updateHours(shift.getAmountHours());
-    girls[1]->updateShiftsWorked();
-
-    shift.addWorker(girls[2]->getName());
-    girls[2]->updateHours(shift.getAmountHours());
-    girls[2]->updateShiftsWorked();
-}
-
-void Schedule::addOneBoy(Shift& shift, vector<Worker*> boys, vector<Worker*> girls)
-{
-    shift.addWorker(boys[0]->getName());
-    boys[0]->updateHours(shift.getAmountHours());
-    boys[0]->updateShiftsWorked();
-}
-
-void Schedule::addOneGirl(Shift& shift, vector<Worker*> boys, vector<Worker*> girls)
-{
-    shift.addWorker(girls[0]->getName());
-    girls[0]->updateHours(shift.getAmountHours());
-    girls[0]->updateShiftsWorked();
+void Schedule::addWorkers(Shift& shift, vector<Worker*> workerVector, int amountToAdd) {
+    for(int i = 0; i < amountToAdd; i++) {
+        shift.addWorker(workerVector[i]->getName());
+        workerVector[i]->updateHours(shift.getAmountHours());
+        workerVector[i]->updateShiftsWorked();
+    }
 }
 
 void Schedule::printSchedule() const
