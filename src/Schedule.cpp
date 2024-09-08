@@ -5,6 +5,7 @@
 #include <iomanip>
 #include <unordered_map>
 #include <unordered_set>
+#include <fstream>
 
 
 Schedule::Schedule(int daysInMonth, int startDay, vector<Worker*>& workers, bool summer, const vector<int>& holidays) 
@@ -239,5 +240,77 @@ void Schedule::printSchedule() const
         ++currentDay;
         weekDay = (weekDay + 1) % 7;
     }
+
+}
+
+void Schedule::printScheduleToCVS(const string& scheduleFile) const
+{
+
+    vector<string> daysOfWeek = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
+
+    // Open a file in write mode
+    ofstream outfile(scheduleFile);
+
+    if (!outfile.is_open()) {
+        cerr << "Error opening file!" << std::endl;
+        return;
+    }
+
+    // Write the days of the week as the header row
+    for (const auto& day : daysOfWeek) {
+        outfile << day << ",";
+    }
+    outfile << endl;
+
+    unordered_map<int, vector<Shift>> shiftsByDay;
+    for (const auto& shift : shifts) {
+        shiftsByDay[shift.getDay()].emplace_back(shift);
+    }
+
+    int currentDay = 1;
+    int weekDay = startDay;
+
+    // Iterate over all days in the month
+    while (currentDay <= daysInMonth) {
+        if (weekDay == 6) {
+            outfile << "No shifts,";
+        } else {
+            auto dayShiftsIt = shiftsByDay.find(currentDay);
+
+            if (dayShiftsIt != shiftsByDay.end()) {
+                const auto& dayShifts = dayShiftsIt->second;
+                for (int shiftType = 0; shiftType <= 2; ++shiftType) {
+                    bool shiftPrinted = false;
+                    for (const auto& shift : dayShifts) {
+                        if (shift.getShiftType() == shiftType) {
+                            if (!shiftPrinted) {
+                                outfile << "Shift " << shiftType << " [";
+                                shiftPrinted = true;
+                            }
+                            const auto& workersList = shift.getWorkers();
+                            for (size_t i = 0; i < workersList.size(); ++i) {
+                                if (i > 0) outfile << ", ";
+                                outfile << workersList[i];
+                            }
+                            outfile << "],";
+                        }
+                    }
+                    if (!shiftPrinted) {
+                        outfile << ",";
+                    }
+                }
+            } else {
+                outfile << "No shifts,";
+            }
+        }
+
+        ++currentDay;
+        weekDay = (weekDay + 1) % 7;
+    }
+
+    outfile << std::endl;
+    outfile.close();
+
+    cout << "Schedule written to " << scheduleFile << std::endl;
 
 }

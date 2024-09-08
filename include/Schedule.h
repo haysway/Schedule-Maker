@@ -32,6 +32,8 @@ public:
 
     void printSchedule() const;
 
+    void printScheduleToCVS(const string&) const;
+
 protected:
     void addWorkers(Shift&, vector<Worker*>, int);
 

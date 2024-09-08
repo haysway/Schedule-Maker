@@ -70,6 +70,8 @@ int main()
     }
     cout << "Total shifts this month: " << totalShifts << endl;
 
+    schedule.printScheduleToCVS("scheduleFile.csv");
+
     for (Worker* worker : workers) {
         delete worker;
     }
