@@ -2,7 +2,7 @@ This is a cpp program to create a schedule based off of the information included
 Info in worker.txt:
 Name, gender, days needed off
 
-Data is read line by line from the text file, deliniated by spaces.
+Data is read line by line from the text file, delimiated by spaces.
 The first item is the name, then gender where 0 is female and 1 is male, and the rest are days off
 
 There are a few rules when assigning shifts:
