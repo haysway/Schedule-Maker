@@ -3,6 +3,7 @@
 #include <string>
 #include <algorithm>
 #include <random>
+#include <chrono>
 #include <ctime>
 #include <iomanip>
 #include <cstdlib>
@@ -18,10 +19,20 @@ int main()
 {
     vector<Worker*> workers;
 
-    Worker::loadWorkers("C:/Users/swain/Schedule Maker/src/worker.txt", workers);
+    Worker::loadWorkers("C:/Users/swain/ScheduleMakerGit/Schedule-Maker/src/worker.txt", workers);
 
-    default_random_engine rng(static_cast<unsigned>(time(nullptr)));
-    shuffle(workers.begin(), workers.end(), rng);  
+    ////
+    // Create a Mersenne Twister engine
+    std::mt19937 rng(std::random_device{}());
+
+    // Seed the engine with a combination of system time and hardware randomness
+    auto now = std::chrono::high_resolution_clock::now();
+    auto seed = now.time_since_epoch().count() ^ rng();
+    rng.seed(seed);
+
+    // Shuffle the workers vector
+    shuffle(workers.begin(), workers.end(), rng); 
+    //// 
 
     int startDay, daysInMonth, summerinput, holiday;
     vector<int> holidays;
@@ -69,7 +80,7 @@ int main()
         totalShifts = totalShifts + workers[i]->getShiftsWorked();
     }
     cout << "Total shifts this month: " << totalShifts << endl;
-
+                                
     schedule.printScheduleToCVS("C:/Users/swain/ScheduleMakerGit/Schedule-Maker/src/scheduleFile.csv");
     for (Worker* worker : workers) {
         delete worker;

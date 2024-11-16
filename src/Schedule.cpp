@@ -6,6 +6,7 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <fstream>
+#include <chrono>
 
 
 Schedule::Schedule(int daysInMonth, int startDay, vector<Worker*>& workers, bool summer, const vector<int>& holidays) 
@@ -35,10 +36,13 @@ void Schedule::createShifts(const vector<int>& holidays)
 
         } else {                                                        // else weekday (summer is different)
 
-            if (summer) {                                               // if summer, three shifts                        
-                    shifts.emplace_back(Shift(day, 0, 1));          
-                    shifts.emplace_back(Shift(day, 1, 4));              // THESE HOURS NEED UPDATED
-                    shifts.emplace_back(Shift(day, 2, 4)); 
+            if (summer) {                                               // if summer, three shifts  
+                // TODO: UPDATE HOURS FOR SUMMER
+                shifts.emplace_back(Shift(day, 0, 1));          
+                shifts.emplace_back(Shift(day, 1, 4));              // THESE HOURS NEED UPDATED
+                shifts.emplace_back(Shift(day, 2, 4)); 
+
+                cout << "Summer?? bad" << endl;
             } else {
                 shifts.emplace_back(Shift(day, 2, 4.5));                // else school year - one shift (4 and a half hours)
             }
@@ -89,12 +93,18 @@ void Schedule::assignWorkersToShifts()
                 }
             }
 
-            default_random_engine rng(static_cast<unsigned>(time(nullptr)));
+            // Create a Mersenne Twister engine
+            std::mt19937 rng(std::random_device{}());
+
+            // Seed the engine with a combination of system time and hardware randomness
+            auto now = std::chrono::high_resolution_clock::now();
+            auto seed = now.time_since_epoch().count() ^ rng();
+            rng.seed(seed);
 
             shuffle(workers.begin(), workers.end(), rng);  
 
             for (Worker* worker : workers) {                                        // for each worker
-                if (worker->isAvailable(shiftDay) && find(previousShiftWorkers.begin(), previousShiftWorkers.end(), worker) == previousShiftWorkers.end()) {                                                                                 // if not requested off
+                if (worker->isAvailable(shiftDay) && find(previousShiftWorkers.begin(), previousShiftWorkers.end(), worker) == previousShiftWorkers.end()) {                                                                   // if not requested off
 
                     if (worker->getGender() == 1) {                                 // add them to the boys vector
                         boys.emplace_back(worker);
@@ -128,6 +138,21 @@ void Schedule::assignWorkersToShifts()
             std::sort(girls.begin(), girls.end(), [](Worker* a, Worker* b) {
                 return a->getTotalHoursWorked() < b->getTotalHoursWorked();
             });
+
+            ////
+            // std::cout << "Sorted Boys List:\n";
+            // for (Worker* boy : boys) {
+            //     std::cout << boy->getName() << ": " << boy->getTotalHoursWorked() << " hours\n";
+            // }
+
+            // // Print the sorted girls list
+            // std::cout << "\nSorted Girls List:\n";
+            // for (Worker* girl : girls) {
+            //     std::cout << girl->getName() << ": " << girl->getTotalHoursWorked() << " hours\n";
+            // }
+            // cout << endl << endl;
+            ////
+
 
             // Assign one girl and two boys, or two girls and one boy
             if (shiftType == 0) {                                                   // Shift 0 has 2 workers, so assign one of each

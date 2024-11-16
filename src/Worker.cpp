@@ -31,7 +31,7 @@ void Worker::seeDaysOff()
     cout << endl;
 }
 
-void Worker::updateHours(int shiftHours) 
+void Worker::updateHours(float shiftHours) 
 {
     totalHoursWorked += shiftHours;
 }
@@ -41,7 +41,7 @@ void Worker::updateShiftsWorked()
     shiftsWorked++;
 }
 
-int Worker::getTotalHoursWorked() const
+float Worker::getTotalHoursWorked() const
 {
     return totalHoursWorked;
 }
@@ -71,7 +71,7 @@ void Worker::loadWorkers(const string& workerFile, vector<Worker*>& workers)
         while (iss >> day) {
             daysOff.push_back(day);
         }
-
+        cout << "Loading worker: " << name << endl;
         workers.emplace_back(new Worker(name, gender, daysOff));
     }
 

@@ -1,6 +1,6 @@
 #include "../include/Shift.h"
 
-Shift::Shift(int day, int shiftType, int amountHours) : day(day), shiftType(shiftType), amountHours(amountHours)
+Shift::Shift(int day, int shiftType, float amountHours) : day(day), shiftType(shiftType), amountHours(amountHours)
 {
 
 }
@@ -15,7 +15,7 @@ int Shift::getShiftType() const
     return shiftType;
 }
 
-int Shift::getAmountHours() const
+float Shift::getAmountHours() const
 {
     return amountHours;
 }

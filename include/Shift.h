@@ -15,18 +15,18 @@ private:
 
     int shiftType; // 0 for lap swim, 1 for 1st shift, 2 for 2nd shift
 
-    int amountHours;
+    float amountHours;
 
     vector<string> assignedWorkers;
 
 public:
-    Shift(int, int, int);
+    Shift(int, int, float);
 
     int getDay() const;
 
     int getShiftType() const;
 
-    int getAmountHours() const;
+    float getAmountHours() const;
 
     void addWorker(const string& workerName);
 

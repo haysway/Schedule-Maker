@@ -13,7 +13,7 @@ private:
 
     int gender;     // 1 for boy 0 for girl
 
-    int totalHoursWorked;
+    float totalHoursWorked;
 
     int shiftsWorked { 0 };
 
@@ -30,11 +30,11 @@ public:
 
     void seeDaysOff();
 
-    void updateHours(int);
+    void updateHours(float);
 
     void updateShiftsWorked();
 
-    int getTotalHoursWorked() const;
+    float getTotalHoursWorked() const;
 
     int getShiftsWorked() const;
 
