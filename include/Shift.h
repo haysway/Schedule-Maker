@@ -11,26 +11,26 @@ using namespace std;
 class Shift
 {
 private:
-    int day;
+    // int day;
 
-    int shiftType; // 0 for lap swim, 1 for 1st shift, 2 for 2nd shift
+    // int shiftType; // 0 for lap swim, 1 for 1st shift, 2 for 2nd shift
 
-    float amountHours;
+    // float amountHours;
 
-    vector<string> assignedWorkers;
+    // vector<string> assignedWorkers;
 
 public:
-    Shift(int, int, float);
+    // Shift(int, int, float);
 
-    int getDay() const;
+    // int getDay() const;
 
-    int getShiftType() const;
+    // int getShiftType() const;
 
-    float getAmountHours() const;
+    // float getAmountHours() const;
 
-    void addWorker(const string& workerName);
+    // void addWorker(const string& workerName);
 
-    const vector<string>& getWorkers() const;
+    // const vector<string>& getWorkers() const;
 };
 
 #endif

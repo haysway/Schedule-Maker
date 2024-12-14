@@ -14,28 +14,28 @@ using namespace std;
 class Schedule
 {
 private:
-    vector<Shift> shifts;
+    // vector<Shift> shifts;
 
-    vector<Worker*>& workers;
+    // vector<Worker*>& workers;
 
-    int startDay;
+    // int startDay;
 
-    int daysInMonth;
+    // int daysInMonth;
 
-    bool summer;
+    // bool summer;
 public:
-    Schedule(int, int, vector<Worker*>&, bool, const vector<int>&);
+    // Schedule(int, int, vector<Worker*>&, bool, const vector<int>&);
 
-    void createShifts(const vector<int>&);
+    // void createShifts(const vector<int>&);
 
-    void assignWorkersToShifts();
+    // void assignWorkersToShifts();
 
-    void printSchedule() const;
+    // void printSchedule() const;
 
-    void printScheduleToCVS(const string&) const;
+    // void printScheduleToCVS(const string&) const;
 
 protected:
-    void addWorkers(Shift&, vector<Worker*>, int);
+    // void addWorkers(Shift&, vector<Worker*>, int);
 
 };
 
