@@ -6,9 +6,7 @@ using std::endl;
 using std::cout;
 
 Shift::Shift(int shiftType, float hours)
-: shiftType(shiftType), hours(hours) {
-
-}
+: shiftType(shiftType), hours(hours) {}
 
 void Shift::printInfo() {
     cout << "Shift: " << this->shiftType << endl;

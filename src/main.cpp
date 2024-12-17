@@ -31,6 +31,7 @@ enum ProgramState {
     MENU,
     LOAD_WORKERS,
     LOAD_SCHEDULE,
+    LOAD_ASSIGN_WORKERS,
     LOAD_PRINT_SCHEDULE,
     EXIT
 };
@@ -38,80 +39,12 @@ enum ProgramState {
 ProgramState handleMenu();
 ProgramState handleLoadWorkers(vector<Worker*>&);
 ProgramState handleLoadSchedule(Schedule*& masterSchedule);
+ProgramState handleAssignWorkers();
 ProgramState handlePrintSchedule(const Schedule* masterSchedule);
 
 int main()
 {
-    // vector<Worker*> workers;
-
-    // Worker::loadWorkers("C:/Users/swain/ScheduleMakerGit/Schedule-Maker/src/worker.txt", workers);
-
-    // ////
-    // // Create a Mersenne Twister engine
-    // std::mt19937 rng(std::random_device{}());
-
-    // // Seed the engine with a combination of system time and hardware randomness
-    // auto now = std::chrono::high_resolution_clock::now();
-    // auto seed = now.time_since_epoch().count() ^ rng();
-    // rng.seed(seed);
-
-    // // Shuffle the workers vector
-    // shuffle(workers.begin(), workers.end(), rng); 
-    // //// 
-
-    // int startDay, daysInMonth, summerinput, holiday;
-    // vector<int> holidays;
-    // bool summer;
-
-    // cout << "Enter starting day of month (0=Monday, 6=Sunday): ";
-    // cin >> startDay;
-    // cout << "Enter number of days in month: ";
-    // cin >> daysInMonth;
-    // while (true) {
-    //     cout << "Enter a holiday day (1-31) (-1 to quit): ";
-    //     cin >> holiday;
-
-    //     if (holiday == -1) {
-    //         break;
-    //     }
-
-    //     if (holiday >= 1 && holiday <= 31) {
-    //         holidays.push_back(holiday);
-    //     } else {
-    //         cout << "Invalid entry. Enter a day between 1 and 31" << endl;
-    //     }
-    // }
-    // cout << "Is this a summer month?: ";
-    // cin >> summerinput;
-    // if (summerinput == 1) {
-    //     summer = true;
-    // } else {
-    //     summer = false;
-    // }
-
-    // system("cls");
-
-    // Schedule schedule(daysInMonth, startDay, workers, summer, holidays);
-    // schedule.assignWorkersToShifts();
-
-    // schedule.printSchedule();
-    // cout << endl;
-
-    // for (int i = 0; i < workers.size(); i++) {
-    //     cout << workers[i]->getName() << " is working " << workers[i]->getShiftsWorked() << " shifts and " << workers[i]->getTotalHoursWorked() << " hours this month" << endl; 
-    // }
-    // int totalShifts { 0 };
-    // for (int i = 0; i < workers.size(); i++) {
-    //     totalShifts = totalShifts + workers[i]->getShiftsWorked();
-    // }
-    // cout << "Total shifts this month: " << totalShifts << endl;
-                                
-    // schedule.printScheduleToCVS("C:/Users/swain/ScheduleMakerGit/Schedule-Maker/src/scheduleFile.csv");
-    // for (Worker* worker : workers) {
-    //     delete worker;
-    // }
-
-    vector<Worker*> workers;    //TODO: initialize with nullptr, then delete this
+    vector<Worker*> workers;    //TODO: initialize with nullptr
     Schedule* masterSchedule = nullptr;
         
     ProgramState currentState = MENU;
@@ -125,6 +58,9 @@ int main()
                 break;
             case LOAD_SCHEDULE:
                 currentState = handleLoadSchedule(masterSchedule);
+                break;
+            case LOAD_ASSIGN_WORKERS:
+                currentState = handleAssignWorkers();
                 break;
             case LOAD_PRINT_SCHEDULE:
                 currentState = handlePrintSchedule(masterSchedule);
@@ -149,6 +85,7 @@ ProgramState handleMenu() {
     cout << "Choose from the following:\n";
     cout << "1 - Load Workers\n";
     cout << "2 - Load Schedule\n";
+    cout << "3 - Assign Workers\n";
     cout << "4 - Print Schedule\n";
     cout << "5 - Exit\n";
     cout << "Choice? ";
@@ -157,6 +94,7 @@ ProgramState handleMenu() {
     switch (choice) {
         case 1: return LOAD_WORKERS;
         case 2: return LOAD_SCHEDULE;
+        case 3: return LOAD_ASSIGN_WORKERS;
         case 4: return LOAD_PRINT_SCHEDULE;
         case 5: return EXIT;
         default:
@@ -207,7 +145,6 @@ ProgramState handleLoadSchedule(Schedule*& masterSchedule) {
     int daysInMonth, startDay, numShiftsWeekday, numShiftsWeekend;
     vector<int> holidays;
     float weekdayNormalHours, weekendNormalHours;
-    // vector<tuple<int, int, float>> customHours; // day, shift number, hours
 
     cout << "Enter information about the month to create the calender.\n\n";
     cout << "Enter the number of days in the month: ";
@@ -215,38 +152,23 @@ ProgramState handleLoadSchedule(Schedule*& masterSchedule) {
     cout << "Enter the starting day of the month (0 = Monday, 6 = Sunday): ";
     cin >> startDay;
 
-    // int specialDay, shiftNumber;
-    // float specialHours;
-    // while (true) {
-    //     cout << "Enter a special day (1-31) with its new hours (-1 to quit): ";
-    //     cin >> specialDay;
-    //     if (specialDay == -1) {
-    //         break;
-    //     }
-
-    //     cout << "Enter shift number for this day: ";
-    //     cin >> shiftNumber;
-
-    //     cout << "Enter the new hours for day " << specialDay << ": ";
-    //     cin >> specialHours;
-    //     if (specialDay >= 1 && specialDay <= 31) {
-    //         customHours.push_back(make_tuple(specialDay, shiftNumber, specialHours));
-    //     } else {
-    //         cout << "Invalid entry.\n";
-    //     }
-    // }
-
-
-
     delete masterSchedule;
-    // masterSchedule = new Schedule(daysInMonth, startDay, holidays, weekdayNormalHours, weekendNormalHours, customHours);
     masterSchedule = new Schedule(daysInMonth, startDay);
     cout << "Schedule created successfully.\n";
 
     return MENU;
 }
 
+ProgramState handleAssignWorkers() {
+    // A state to assign all the workers to their shifts, completing the schedule
+    // TODO: change all vectors of Workers to hold pointers: reducing copying
+    // logic will be the same as previously
+
+    return MENU;
+}
+
 ProgramState handlePrintSchedule(const Schedule* masterSchedule) {
+    // prints out the schedule, and returns to MENU state
     if (masterSchedule) {
         masterSchedule->printInfo();
     } else {

@@ -15,7 +15,6 @@ private:
     int startDay;
 
 public:
-    //Schedule(int, int, vector<int>, float, float, vector<tuple<int,int, float>>);
     Schedule(int, int);
 
     void printInfo() const;

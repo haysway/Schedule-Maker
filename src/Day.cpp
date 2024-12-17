@@ -6,7 +6,7 @@ using std::cout;
 using std::endl;
 
 Day::Day(int day, int weekDay) 
-: day(day), weekDay(weekDay){
+: day(day), weekDay(weekDay) {
     this->shifts.push_back(Shift(-1, 0));
 }
 

@@ -10,39 +10,8 @@ using std::cerr;
 using std::ifstream;
 using std::istringstream;
 
-
-// void Worker::loadWorkers(const string& workerFile, vector<Worker*>& workers)
-// {
-//     ifstream file(workerFile);
-//     if (!file.is_open()) {
-//         cerr << "Error opening file: " << workerFile << endl;
-//         return;
-//     }
-
-//     string line;
-//     while(getline(file, line)) {
-//         istringstream iss(line);
-//         string name;
-//         int gender;
-//         vector<int> daysOff;
-//         int day;
-
-//         iss >> name >> gender;
-//         while (iss >> day) {
-//             daysOff.push_back(day);
-//         }
-//         cout << "Loading worker: " << name << endl;
-//         workers.emplace_back(new Worker(name, gender, daysOff));
-//     }
-
-//     file.close();
-// }
-
-
 Worker::Worker(string name, bool gender, vector<int> daysOff) : name(name), isMale(gender), requestedDaysOff(daysOff)
-{
-
-}
+{}
 
 bool Worker::readInWorkers(const string& workerFile, vector<Worker*>& workers)
 {

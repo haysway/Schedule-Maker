@@ -2,60 +2,11 @@
 
 #include <iostream>
 #include <algorithm>
-// #include <iomanip>
-// #include <unordered_map>
-// #include <unordered_set>
-// #include <fstream>
-// #include <chrono>
 
 using std::cout;
 using std::endl;
 using std::cin;
 using std::pair;
-
-
-// Schedule::Schedule(int daysInMonth, int startDay, vector<Worker*>& workers, bool summer, const vector<int>& holidays) 
-// : daysInMonth(daysInMonth), startDay(startDay), workers(workers), summer(summer)
-// {
-//     createShifts(holidays);
-// }
-
-// void Schedule::createShifts(const vector<int>& holidays) 
-// {   
-
-//     unordered_set<int> holidaysSet(holidays.begin(), holidays.end());
-
-
-//     for (int day = 1; day <= daysInMonth; day++) {
-//         int weekDay = (startDay + day - 1) % 7;                         // calculate the weekday for the given start day
-
-//         if (holidaysSet.find(day) != holidaysSet.end()) {
-//             continue;
-//         }
-
-//         if (weekDay == 6) {
-//             shifts.emplace_back(Shift(day, 7, 0));                      // set shift to 7 if day is Sunday (placeholder value)
-//         } else if (weekDay == 5) {                                      // all saturdays are the same (both shifts 4 hours)
-//             shifts.emplace_back(Shift(day, 1, 4));
-//             shifts.emplace_back(Shift(day, 2, 4));
-
-//         } else {                                                        // else weekday (summer is different)
-
-//             if (summer) {                                               // if summer, three shifts  
-//                 // TODO: UPDATE HOURS FOR SUMMER
-//                 shifts.emplace_back(Shift(day, 0, 1));          
-//                 shifts.emplace_back(Shift(day, 1, 4));              // THESE HOURS NEED UPDATED
-//                 shifts.emplace_back(Shift(day, 2, 4)); 
-
-//                 cout << "Summer?? bad" << endl;
-//             } else {
-//                 shifts.emplace_back(Shift(day, 2, 4.5));                // else school year - one shift (4 and a half hours)
-//             }
-
-//         }
-
-//     }
-// }
 
 // void Schedule::assignWorkersToShifts()
 // {
@@ -197,82 +148,6 @@ using std::pair;
 //     }
 // }
 
-// void Schedule::printSchedule() const
-// {
-//     vector<string> daysOfWeek = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
-
-//     // organize shifts into a map by day and shift type
-//     unordered_map<int, vector<Shift>> shiftsByDay;
-//     for (const auto& shift : shifts) {
-//         shiftsByDay[shift.getDay()].emplace_back(shift);
-//     }
-
-//     int currentDay = 1;
-//     int weekDay = startDay;
-
-//     while (currentDay <= daysInMonth) {
-//         cout << daysOfWeek[weekDay] << " " << currentDay << endl;                                   // Print the day of the week and day number
-
-//         if (weekDay == 6) {                                                                         // Check if it's a Sunday (no shifts)
-//             cout << "No shifts" << endl;
-//         } else {
-//             auto dayShiftsIt = shiftsByDay.find(currentDay);
-
-//             if (dayShiftsIt != shiftsByDay.end()) {
-//                 bool hasShifts = false;                                                             // Flag to check if any shifts are present
-
-//                 const auto& dayShifts = dayShiftsIt->second;
-
-//                 for (int shiftType = 0; shiftType <= 2; ++shiftType) {                              // Print shifts for the current day
-//                     bool shiftPrinted = false;
-
-//                     for (const auto& shift : dayShifts) {
-
-//                         if (shift.getShiftType() == shiftType) {                                    // check to make sure we're in the right spot
-
-//                             if (!shiftPrinted) {
-//                                 cout << "Shift " << shiftType << " ";
-//                                 shiftPrinted = true;                                 
-//                             }
-
-//                             const auto& workersList = shift.getWorkers();                           // store the assigned workers to workersList (carefully)
-//                             cout << "[";
-//                             for (size_t i = 0; i < workersList.size(); ++i) {                       // for each name in the list print it
-//                                 if (i > 0) cout << ", ";
-//                                     cout << workersList[i];
-//                             }
-//                             cout << "]" << endl;
-
-//                             hasShifts = true;                                                       // that day has shifts
-
-//                         }
-
-//                     }
-
-//                     if (shiftPrinted) {
-//                         cout << endl;
-//                     }
-
-//                 }
-
-//                 if (!hasShifts) {
-//                     cout << "No shifts" << endl;
-//                 }
-
-//             } else {
-//                 cout << "No shifts" << endl;
-//             }
-//         }
-
-//         cout << endl;                                                   
-
-//         // Move to the next day and weekday
-//         ++currentDay;
-//         weekDay = (weekDay + 1) % 7;
-//     }
-
-// }
-
 // void Schedule::printScheduleToCVS(const string& scheduleFile) const
 // {
 //     // very similar to print schedule, just printing to a csv file, so some delimiters are added/removed
@@ -372,47 +247,6 @@ using std::pair;
 
 // }
 
-
-
-
-
-
-
-
-
-
-// Schedule::Schedule(int numDays, int startDay, vector<int> holidays, float weekdayNormalHours, float weekendNormalHours, vector<tuple<int,int, float>> customHours) 
-// : numDays(numDays), startDay(startDay) {
-//     for (int day = 1; day <= this->numDays; day++) {
-//         int weekDay = (startDay + day - 1) % 7;                         // calculate the weekday for the given start day
-        
-//         // create an empty 'shell' of a schedule
-//         // everything is filled out except for workers in the shift vector
-//         auto itHoliday = find(holidays.begin(), holidays.end(), day);
-//         auto customShiftIt = find_if(customHours.begin(), customHours.end(), [day](const tuple<int, int, float>& p) {return get<0>(p) == day;});
-
-//         if (weekDay == 6 || itHoliday != holidays.end()) {
-//             this->shiftCalender.push_back(Shift(day, weekDay, -1, 0, true));
-//         } else if (customShiftIt != customHours.end()) {
-//             // use custom hours
-//             if (weekDay <= 4) {
-//                 // can update the shift normaly, only one shift
-//                 int shiftNumber = get<1>(*customShiftIt);
-//                 float customShiftHours = get<2>(*customShiftIt);
-//                 this->shiftCalender.push_back(Shift(day, weekDay, shiftNumber, customShiftHours, false));
-//             } else {
-//                 // there are two shifts
-//             }
-//         } else if (weekDay <= 4) { 
-//             // weekday
-//             this->shiftCalender.push_back(Shift(day, weekDay, 1, weekdayNormalHours, false));
-//         } else {    
-//             // weekend
-//             this->shiftCalender.push_back(Shift(day, weekDay, 1, weekendNormalHours, false));
-//             this->shiftCalender.push_back(Shift(day, weekDay, 2, weekendNormalHours, false));
-//         }
-//     }
-// }
 
 Schedule::Schedule(int numDays, int startDay)
 : numDays(numDays), startDay(startDay) {
