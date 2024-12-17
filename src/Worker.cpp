@@ -1,51 +1,15 @@
 #include "../include/Worker.h"
 
-// Worker::Worker(string name, int gender, vector<int> daysOff) : name(name), gender(gender), requestedDaysOff(daysOff), totalHoursWorked(0), shiftsWorked(0)
-// {}
+#include <fstream>
+#include <sstream>
+#include <iostream>
 
-// string Worker::getName()
-// {
-//     return name;
-// }
+using std::cout;
+using std::endl;
+using std::cerr;
+using std::ifstream;
+using std::istringstream;
 
-// int Worker::getGender()
-// {
-//     return gender;
-// }
-
-// bool Worker::isAvailable(int day) 
-// {
-//     return std::find(requestedDaysOff.begin(), requestedDaysOff.end(), day) == requestedDaysOff.end();
-// }
-
-// void Worker::seeDaysOff() 
-// {
-//     cout << "Worker " << name << " requested the following days off: ";
-//     for (int day : requestedDaysOff) {
-//         cout << day << " ";
-//     }
-//     cout << endl;
-// }
-
-// void Worker::updateHours(float shiftHours) 
-// {
-//     totalHoursWorked += shiftHours;
-// }
-
-// void Worker::updateShiftsWorked() 
-// {
-//     shiftsWorked++;
-// }
-
-// float Worker::getTotalHoursWorked() const
-// {
-//     return totalHoursWorked;
-// }
-
-// int Worker::getShiftsWorked() const
-// {
-//     return shiftsWorked;
-// }
 
 // void Worker::loadWorkers(const string& workerFile, vector<Worker*>& workers)
 // {
@@ -75,15 +39,9 @@
 // }
 
 
-
-// vector<int> Worker::getDaysOff() const {
-//     return requestedDaysOff;
-// }
-
-// worker with no days off
 Worker::Worker(string name, bool gender, vector<int> daysOff) : name(name), isMale(gender), requestedDaysOff(daysOff)
 {
-    cout << "Creating worker " << name << endl;
+
 }
 
 bool Worker::readInWorkers(const string& workerFile, vector<Worker*>& workers)

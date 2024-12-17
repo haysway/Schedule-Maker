@@ -3,40 +3,22 @@
 
 #pragma once
 
-#include "./Shift.h"
-#include "./Worker.h"
-
+#include "./Day.h"
 #include <vector>
-#include <random>
-#include <ctime>
-using namespace std;
 
-class Schedule
-{
+using std::vector;
+
+class Schedule {
 private:
-    // vector<Shift> shifts;
+    vector<Day> days;
+    int numDays;
+    int startDay;
 
-    // vector<Worker*>& workers;
-
-    // int startDay;
-
-    // int daysInMonth;
-
-    // bool summer;
 public:
-    // Schedule(int, int, vector<Worker*>&, bool, const vector<int>&);
+    //Schedule(int, int, vector<int>, float, float, vector<tuple<int,int, float>>);
+    Schedule(int, int);
 
-    // void createShifts(const vector<int>&);
-
-    // void assignWorkersToShifts();
-
-    // void printSchedule() const;
-
-    // void printScheduleToCVS(const string&) const;
-
-protected:
-    // void addWorkers(Shift&, vector<Worker*>, int);
-
+    void printInfo() const;
 };
 
 #endif

@@ -13,6 +13,7 @@
 #include <random>
 #include <chrono>
 #include <algorithm>
+#include <vector>
 
 using std::cout;
 using std::cin;
@@ -22,19 +23,22 @@ using std::random_device;
 using std::shuffle;
 
 #include "../include/Worker.h"
-// #include "../include/Shift.h"
-// #include "../include/Schedule.h"
+#include "../include/Shift.h"
+#include "../include/Schedule.h"
 
 
 enum ProgramState {
     MENU,
     LOAD_WORKERS,
-
+    LOAD_SCHEDULE,
+    LOAD_PRINT_SCHEDULE,
     EXIT
 };
 
-ProgramState handleLoadWorkers(vector<Worker*>&);
 ProgramState handleMenu();
+ProgramState handleLoadWorkers(vector<Worker*>&);
+ProgramState handleLoadSchedule(Schedule*& masterSchedule);
+ProgramState handlePrintSchedule(const Schedule* masterSchedule);
 
 int main()
 {
@@ -107,7 +111,8 @@ int main()
     //     delete worker;
     // }
 
-    vector<Worker*> workers;    //TODO: delete this
+    vector<Worker*> workers;    //TODO: initialize with nullptr, then delete this
+    Schedule* masterSchedule = nullptr;
         
     ProgramState currentState = MENU;
     while (currentState != EXIT) {
@@ -118,24 +123,41 @@ int main()
             case LOAD_WORKERS:
                 currentState = handleLoadWorkers(workers);
                 break;
+            case LOAD_SCHEDULE:
+                currentState = handleLoadSchedule(masterSchedule);
+                break;
+            case LOAD_PRINT_SCHEDULE:
+                currentState = handlePrintSchedule(masterSchedule);
+                break;
             default:
                 cout << "Invalid state. Exiting.\n";
                 currentState = EXIT;
                 break;
         }
     }
+
+    delete masterSchedule;
+    for (Worker* worker : workers) {
+        delete worker;
+    }
+
+    return 0;
 }
 
 ProgramState handleMenu() {
     int choice;
     cout << "Choose from the following:\n";
     cout << "1 - Load Workers\n";
+    cout << "2 - Load Schedule\n";
+    cout << "4 - Print Schedule\n";
     cout << "5 - Exit\n";
     cout << "Choice? ";
     cin >> choice;
 
     switch (choice) {
         case 1: return LOAD_WORKERS;
+        case 2: return LOAD_SCHEDULE;
+        case 4: return LOAD_PRINT_SCHEDULE;
         case 5: return EXIT;
         default:
             cout << "Invalid choice. Try again.\n";
@@ -174,5 +196,62 @@ ProgramState handleLoadWorkers(vector<Worker*>& workers) {
         cout << "Error loading workers. Returning to menu\n";
     }
     
+    return MENU;
+}
+
+ProgramState handleLoadSchedule(Schedule*& masterSchedule) {
+    // A state that loads in info to create an empty month schedule
+    // Needs info such as days in month, starting day, holidays,
+    // normal hours, special hours
+
+    int daysInMonth, startDay, numShiftsWeekday, numShiftsWeekend;
+    vector<int> holidays;
+    float weekdayNormalHours, weekendNormalHours;
+    // vector<tuple<int, int, float>> customHours; // day, shift number, hours
+
+    cout << "Enter information about the month to create the calender.\n\n";
+    cout << "Enter the number of days in the month: ";
+    cin >> daysInMonth;
+    cout << "Enter the starting day of the month (0 = Monday, 6 = Sunday): ";
+    cin >> startDay;
+
+    // int specialDay, shiftNumber;
+    // float specialHours;
+    // while (true) {
+    //     cout << "Enter a special day (1-31) with its new hours (-1 to quit): ";
+    //     cin >> specialDay;
+    //     if (specialDay == -1) {
+    //         break;
+    //     }
+
+    //     cout << "Enter shift number for this day: ";
+    //     cin >> shiftNumber;
+
+    //     cout << "Enter the new hours for day " << specialDay << ": ";
+    //     cin >> specialHours;
+    //     if (specialDay >= 1 && specialDay <= 31) {
+    //         customHours.push_back(make_tuple(specialDay, shiftNumber, specialHours));
+    //     } else {
+    //         cout << "Invalid entry.\n";
+    //     }
+    // }
+
+
+
+    delete masterSchedule;
+    // masterSchedule = new Schedule(daysInMonth, startDay, holidays, weekdayNormalHours, weekendNormalHours, customHours);
+    masterSchedule = new Schedule(daysInMonth, startDay);
+    cout << "Schedule created successfully.\n";
+
+    return MENU;
+}
+
+ProgramState handlePrintSchedule(const Schedule* masterSchedule) {
+    if (masterSchedule) {
+        masterSchedule->printInfo();
+    } else {
+        cout << "No schedule loaded. Load a schedule first.\n";
+    }
+
     return MENU;
 }

@@ -1,31 +1,16 @@
-// #include "../include/Shift.h"
+#include "../include/Shift.h"
 
-// Shift::Shift(int day, int shiftType, float amountHours) : day(day), shiftType(shiftType), amountHours(amountHours)
-// {
+#include <iostream>
 
-// }
+using std::endl;
+using std::cout;
 
-// int Shift::getDay() const
-// {
-//     return day;
-// }
+Shift::Shift(int shiftType, float hours)
+: shiftType(shiftType), hours(hours) {
 
-// int Shift::getShiftType() const
-// {
-//     return shiftType;
-// }
+}
 
-// float Shift::getAmountHours() const
-// {
-//     return amountHours;
-// }
-
-// void Shift::addWorker(const string& workerName)
-// {
-//     assignedWorkers.emplace_back(workerName);
-// }
-
-// const vector<string>& Shift::getWorkers() const
-// {
-//     return assignedWorkers;
-// }
+void Shift::printInfo() {
+    cout << "Shift: " << this->shiftType << endl;
+    cout << "Hours: " << this->hours << endl << endl << endl;
+}
