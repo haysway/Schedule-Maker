@@ -30,6 +30,7 @@ using std::shuffle;
 enum ProgramState {
     MENU,
     LOAD_WORKERS,
+    LOAD_SEE_WORKERS,
     LOAD_SCHEDULE,
     LOAD_ASSIGN_WORKERS,
     LOAD_PRINT_SCHEDULE,
@@ -38,8 +39,9 @@ enum ProgramState {
 
 ProgramState handleMenu();
 ProgramState handleLoadWorkers(vector<Worker*>&);
+ProgramState handleSeeWorkers(vector<Worker*>&);
 ProgramState handleLoadSchedule(Schedule*& masterSchedule);
-ProgramState handleAssignWorkers();
+ProgramState handleAssignWorkers(Schedule*&, const vector<Worker*>&);
 ProgramState handlePrintSchedule(const Schedule* masterSchedule);
 
 int main()
@@ -56,11 +58,14 @@ int main()
             case LOAD_WORKERS:
                 currentState = handleLoadWorkers(workers);
                 break;
+            case LOAD_SEE_WORKERS:
+                currentState = handleSeeWorkers(workers);
+                break;
             case LOAD_SCHEDULE:
                 currentState = handleLoadSchedule(masterSchedule);
                 break;
             case LOAD_ASSIGN_WORKERS:
-                currentState = handleAssignWorkers();
+                currentState = handleAssignWorkers(masterSchedule, workers);
                 break;
             case LOAD_PRINT_SCHEDULE:
                 currentState = handlePrintSchedule(masterSchedule);
@@ -84,19 +89,21 @@ ProgramState handleMenu() {
     int choice;
     cout << "Choose from the following:\n";
     cout << "1 - Load Workers\n";
-    cout << "2 - Load Schedule\n";
-    cout << "3 - Assign Workers\n";
-    cout << "4 - Print Schedule\n";
-    cout << "5 - Exit\n";
+    cout << "2 - See Workers\n";
+    cout << "3 - Load Schedule\n";
+    cout << "4 - Assign Workers\n";
+    cout << "5 - Print Schedule\n";
+    cout << "6 - Exit\n";
     cout << "Choice? ";
     cin >> choice;
 
     switch (choice) {
         case 1: return LOAD_WORKERS;
-        case 2: return LOAD_SCHEDULE;
-        case 3: return LOAD_ASSIGN_WORKERS;
-        case 4: return LOAD_PRINT_SCHEDULE;
-        case 5: return EXIT;
+        case 2: return LOAD_SEE_WORKERS;
+        case 3: return LOAD_SCHEDULE;
+        case 4: return LOAD_ASSIGN_WORKERS;
+        case 5: return LOAD_PRINT_SCHEDULE;
+        case 6: return EXIT;
         default:
             cout << "Invalid choice. Try again.\n";
             return MENU;
@@ -113,8 +120,6 @@ ProgramState handleLoadWorkers(vector<Worker*>& workers) {
     bool readIsGood = Worker::readInWorkers("C:/Users/swain/ScheduleMakerGit/Schedule-Maker/src/worker.txt", workers);
 
     if (readIsGood) {
-        cout << "Workers loaded successfully. Returning to menu\n";
-        ////
         // Create a Mersenne Twister engine
         std::mt19937 rng(std::random_device{}());
 
@@ -125,15 +130,19 @@ ProgramState handleLoadWorkers(vector<Worker*>& workers) {
 
         // Shuffle the workers vector
         shuffle(workers.begin(), workers.end(), rng); 
-        //// 
 
-        for (auto worker : workers) {
-            cout << worker << endl;
-        }
+        cout << "Workers loaded successfully. Returning to menu\n";
     } else {
         cout << "Error loading workers. Returning to menu\n";
     }
     
+    return MENU;
+}
+
+ProgramState handleSeeWorkers(vector<Worker*>& workers) {
+    // A state to see all the workers and their days off
+    // in a visually friendly fashion
+    Worker::printWorkers(workers);
     return MENU;
 }
 
@@ -159,11 +168,16 @@ ProgramState handleLoadSchedule(Schedule*& masterSchedule) {
     return MENU;
 }
 
-ProgramState handleAssignWorkers() {
+ProgramState handleAssignWorkers(Schedule*& masterSchedule, const vector<Worker*>& workers) {
     // A state to assign all the workers to their shifts, completing the schedule
-    // TODO: change all vectors of Workers to hold pointers: reducing copying
-    // logic will be the same as previously
 
+    // split workers vector into two vectors, boy workers and girl workers
+    vector<Worker*> boyWorkers;
+    vector<Worker*> girlWorkers;
+    Worker::segregateWorkers(workers, boyWorkers, girlWorkers);
+
+    masterSchedule->assignWorkers(boyWorkers, girlWorkers);
+    
     return MENU;
 }
 

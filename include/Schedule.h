@@ -10,12 +10,14 @@ using std::vector;
 
 class Schedule {
 private:
-    vector<Day> days;
+    vector<Day*> days;
     int numDays;
     int startDay;
 
 public:
     Schedule(int, int);
+
+    void assignWorkers(vector<Worker*>&, vector<Worker*>&);
 
     void printInfo() const;
 };

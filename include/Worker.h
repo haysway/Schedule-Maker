@@ -18,7 +18,23 @@ private:
 public:
     Worker(string, bool, vector<int>);
 
+    float getHours();
+
+    string getName();
+
+    void updateHours(float);
+
     static bool readInWorkers(const string&, vector<Worker*>&);
+
+    static void segregateWorkers(const vector<Worker*>&, vector<Worker*>&, vector<Worker*>&);
+
+    static void sortByHours(vector<Worker*>&, vector<Worker*>&);
+
+    static void sortByHours(vector<Worker*>&);
+
+    static void checkForDayOff(vector<Worker*>&, vector<Worker*>&, int);
+
+    static void printWorkers(const vector<Worker*>&);
 };
 
 #endif

@@ -12,9 +12,11 @@ class Shift {
 private:
     float hours;
     int shiftType;
-    vector<Worker> staff;
+    vector<Worker*> staff;
 public:
     Shift(int, float);
+
+    void decideWorkers(vector<Worker*>&, vector<Worker*>&, int);
 
     void printInfo();
 };

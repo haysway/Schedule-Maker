@@ -10,13 +10,15 @@ using std::vector;
 
 class Day {
 private:
-    vector<Shift> shifts;
+    vector<Shift*> shifts;
     int day;
     int weekDay;
 public:
     Day(int, int);
-    
+
     Day(int, int, int, vector<float>);
+
+    void scheduleShifts(vector<Worker*>&, vector<Worker*>&);
 
     void printInfo() const;
 };
