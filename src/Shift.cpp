@@ -30,7 +30,6 @@ void Shift::decideWorkers(vector<Worker*>& boys, vector<Worker*>& girls, int day
                 tempBoys[0]->updateHours(this->hours);
                 tempGirls[0]->updateHours(this->hours);
                 tempGirls[1]->updateHours(this->hours);
-
                 return;
             } else if (tempGirls.size() == 1) {
                 // in this case, shift must be the girl and first 2 boys
@@ -56,7 +55,7 @@ void Shift::decideWorkers(vector<Worker*>& boys, vector<Worker*>& girls, int day
                 Worker::sortByHours(allWorkers);
 
                 vector<Worker*> sameHourWorkers;
-                int prevHours = -1;
+                float prevHours = -1.0;
 
                 for (auto& worker : allWorkers) {
                     if (worker->getHours() == prevHours) {
@@ -83,6 +82,12 @@ void Shift::decideWorkers(vector<Worker*>& boys, vector<Worker*>& girls, int day
                     }
                     prevHours = worker->getHours();
                 }
+                // shuffle the sameHourWorkers and pick 3 at random
+                shuffle(sameHourWorkers.begin(), sameHourWorkers.end(), std::mt19937{std::random_device{}()});
+                this->staff.insert(this->staff.end(), sameHourWorkers.begin(), sameHourWorkers.begin() + 3);
+                sameHourWorkers[0]->updateHours(this->hours);
+                sameHourWorkers[1]->updateHours(this->hours);
+                sameHourWorkers[2]->updateHours(this->hours);
             }
         }
     }
@@ -91,9 +96,9 @@ void Shift::decideWorkers(vector<Worker*>& boys, vector<Worker*>& girls, int day
 void Shift::printInfo() {
     cout << "Shift: " << this->shiftType << endl;
     cout << "Hours: " << this->hours << endl;
-    cout << "Workers: ";
+    cout << "Workers:\n";
     for (auto& person : this->staff) {
-        cout << person->getName() << endl;
+        cout << "\t" << person->getName() << endl;
     }
     cout << "\n\n\n";
 }
